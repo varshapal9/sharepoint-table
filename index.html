@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Segoe UI', sans-serif;
+    background: transparent;
+    padding: 10px;
+  }
+
+  .search-wrapper {
+    margin-bottom: 14px;
+    position: relative;
+  }
+
+  .search-wrapper input {
+    width: 100%;
+    padding: 10px 16px 10px 42px;
+    border: 2px solid #7b5ea7;
+    border-radius: 6px;
+    font-size: 14px;
+    color: #333;
+    outline: none;
+    transition: border-color 0.2s;
+    background: #fff;
+  }
+
+  .search-wrapper input:focus {
+    border-color: #5a3d8a;
+    box-shadow: 0 0 0 3px rgba(123, 94, 167, 0.15);
+  }
+
+  .search-wrapper .icon {
+    position: absolute;
+    left: 13px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #7b5ea7;
+    font-size: 16px;
+  }
+
+  .no-results {
+    text-align: center;
+    color: #888;
+    padding: 20px;
+    font-size: 14px;
+    display: none;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+
+  thead tr {
+    background-color: #6b4f9e;
+    color: #fff;
+  }
+
+  thead th {
+    padding: 11px 14px;
+    text-align: left;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+  }
+
+  tbody tr {
+    background-color: #e8dff5;
+    border-bottom: 1px solid #d5c8ec;
+    transition: background 0.15s;
+  }
+
+  tbody tr:hover {
+    background-color: #d6c8ed;
+  }
+
+  tbody td {
+    padding: 9px 14px;
+    color: #333;
+  }
+
+  tbody td a {
+    color: #5a3d8a;
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  tbody td a:hover {
+    text-decoration: underline;
+  }
+
+  .badge {
+    background: #6b4f9e;
+    color: #fff;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+</style>
+</head>
+<body>
+
+<div class="search-wrapper">
+  <span class="icon">🔍</span>
+  <input type="text" id="searchInput" placeholder="Search by file name, folder, or file type..." oninput="filterTable()">
+</div>
+
+<table id="fileTable">
+  <thead>
+    <tr>
+      <th>Folder Level 1</th>
+      <th>Folder Level 2</th>
+      <th>File Name</th>
+      <th>File Type</th>
+      <th>Link</th>
+    </tr>
+  </thead>
+  <tbody id="tableBody">
+    <!-- ============================================================
+         👇 ADD / EDIT YOUR ROWS BELOW
+         Copy a <tr>...</tr> block to add more rows.
+         Replace the text and href="YOUR_LINK_HERE" with real links.
+         ============================================================ -->
+    <tr>
+      <td></td>
+      <td>API</td>
+      <td>API_Demo.zip</td>
+      <td><span class="badge">ZIP</span></td>
+      <td><a href="YOUR_LINK_HERE" target="_blank">Refer to Link</a></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td>API</td>
+      <td>Axis_API_Utility.zip</td>
+      <td><span class="badge">ZIP</span></td>
+      <td><a href="YOUR_LINK_HERE" target="_blank">Refer to Link</a></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td>API</td>
+      <td>Karate-Framework-Performance.zip</td>
+      <td><span class="badge">ZIP</span></td>
+      <td><a href="YOUR_LINK_HERE" target="_blank">Refer to Link</a></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td>API</td>
+      <td>Karate-Framework.zip</td>
+      <td><span class="badge">ZIP</span></td>
+      <td><a href="YOUR_LINK_HERE" target="_blank">Refer to Link</a></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td>API</td>
+      <td>KarateExtentReport-main.zip</td>
+      <td><span class="badge">ZIP</span></td>
+      <td><a href="YOUR_LINK_HERE" target="_blank">Refer to Link</a></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td>API</td>
+      <td>Python_Auto_API_Design_Execution.zip</td>
+      <td><span class="badge">ZIP</span></td>
+      <td><a href="YOUR_LINK_HERE" target="_blank">Refer to Link</a></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td>API</td>
+      <td>Python_Pytest_API_Framework.zip</td>
+      <td><span class="badge">ZIP</span></td>
+      <td><a href="YOUR_LINK_HERE" target="_blank">Refer to Link</a></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td>API</td>
+      <td>Without_QRACE_JMeter.zip</td>
+      <td><span class="badge">ZIP</span></td>
+      <td><a href="YOUR_LINK_HERE" target="_blank">Refer to Link</a></td>
+    </tr>
+    <!-- Add more rows here following the same pattern -->
+  </tbody>
+</table>
+
+<div class="no-results" id="noResults">No files found matching your search.</div>
+
+<script>
+  function filterTable() {
+    const query = document.getElementById('searchInput').value.toLowerCase();
+    const rows = document.querySelectorAll('#tableBody tr');
+    let visibleCount = 0;
+
+    rows.forEach(row => {
+      const text = row.innerText.toLowerCase();
+      if (text.includes(query)) {
+        row.style.display = '';
+        visibleCount++;
+      } else {
+        row.style.display = 'none';
+      }
+    });
+
+    document.getElementById('noResults').style.display = visibleCount === 0 ? 'block' : 'none';
+  }
+</script>
+
+</body>
+</html>
